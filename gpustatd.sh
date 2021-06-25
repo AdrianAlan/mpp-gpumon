@@ -1,5 +1,4 @@
-HOSTDIR=
-
+HOSTDIR=$(dirname "$0")
 IFS='.' read -ra HOST <<< $(cat /etc/hostname)
 TIMESTAMP=$(date +%s)
 VERIFICATION=$(echo "$TIMESTAMP$(<$HOSTDIR/keys/magic.txt)" | /bin/openssl rsautl -encrypt -inkey $HOSTDIR/keys/mppgpumon-pub.pem -pubin | base64 -w 0)
