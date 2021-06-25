@@ -55,6 +55,11 @@ def index():
     return render_template('mpp-gpumon.html', stats=stats)
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return redirect(url_for('static', filename='favicon.ico'))
+
+
 @app.route('/api/get/<planets>')
 def get_api(planets, json=True):
     response = []
