@@ -2,5 +2,13 @@
 database:
  url: 'mongodb://127.0.0.1:27017/'
 
+planets:
+ - mpp-tatooine
+ - naboo
+ - mustafar
+ - kamino
+ - geonosis
+ - dagobah
+
 key: 'keys/mppgpumon-prv.pem'
 magic: 'keys/magic.txt'

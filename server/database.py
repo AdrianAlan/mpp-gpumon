@@ -10,6 +10,13 @@ class GPUDatabase():
         self.client = pymongo.MongoClient(url)
         self.db = self.client["gpustat"]
 
+    def get_state(self, planet):
+        if planet not in self.db.list_collection_names():
+            return []
+        col = self.db[planet]
+        status = col.find().sort("_id")
+        return [s for s in status]
+
     def set_state(self, planet, gpu, users, time):
         col = self.db[planet]
         new_status = {

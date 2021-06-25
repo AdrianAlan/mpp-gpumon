@@ -12,8 +12,26 @@ config = yaml.safe_load(open('server/mpp-gpumon.yml'))
 db = GPUDatabase(url=config['database']['url'])
 
 
+def get_user_full_name(user):
+    c = "phonebook --homedir */{} | awk '{}'".format(user, '{print $2" "$1}')
+    out = subprocess.check_output(c, shell=True)
+    return out.decode()[:-1]
+
+
+def get_state(planet):
+    return db.get_state(planet)
+
+
 def set_state(planet, gid, timestamp, users):
     return db.set_state(planet, gid, users, timestamp)
+
+
+def pprint_users(users):
+    return ', '.join([get_user_full_name(user) for user in users.split(',')])
+
+
+def pprint_time(t):
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(t)))
 
 
 def verify(key, magic, vcode, timestamp):
@@ -29,6 +47,33 @@ def verify(key, magic, vcode, timestamp):
         s = f.read()
     # Verify authenticity
     return out.decode().rstrip() == str(timestamp) + s
+
+
+@app.route('/api/get/<planets>')
+def get_api(planets, json=True):
+    response = []
+
+    if planets == 'all':
+        planets = config['planets']
+    else:
+        planets = planets.split(',')
+
+    for planet in planets:
+        item = {}
+        r, state = [], get_state(planet)
+        if state:
+            for gpu in state:
+                users = pprint_users(gpu['users'])
+                gpu['time'] = pprint_time(gpu['time'])
+                gpu['users'] = users
+                r.append(gpu)
+        item["name"] = planet
+        item["details"] = r
+        response.append(item)
+    if json:
+        return jsonify(response)
+    else:
+        return response
 
 
 @app.route('/api/set', methods=['POST'])
