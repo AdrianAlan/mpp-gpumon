@@ -1,0 +1,6 @@
+---
+database:
+ url: 'mongodb://127.0.0.1:27017/'
+
+key: 'keys/mppgpumon-prv.pem'
+magic: 'keys/magic.txt'
