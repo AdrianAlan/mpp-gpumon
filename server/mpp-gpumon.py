@@ -41,7 +41,7 @@ def verify(key, magic, vcode, timestamp):
         return False
     # Decode the message
     c = ('echo -n "{}" | base64 -d |'
-         'openssl rsautl -decrypt -inkey {} -in -').format(vcode, key)
+         'openssl11 rsautl -decrypt -inkey {} -in -').format(vcode, key)
     out = subprocess.check_output(c, shell=True)
     with open(magic) as f:
         s = f.read()
@@ -97,7 +97,7 @@ def set_api():
     vcode = content['v']
     key = config['key']
     magic = config['magic']
-    if verify(key, vcode, timestamp):
+    if verify(key, magic, vcode, timestamp):
         try:
             set_state(planet, gid, timestamp, users)
             r = jsonify(success=True)
