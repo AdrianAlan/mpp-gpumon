@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# mpp-gpumon
+keys/magic.txt
+keys/mppgpumon-prv.pem
