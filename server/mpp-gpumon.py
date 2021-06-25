@@ -49,6 +49,12 @@ def verify(key, magic, vcode, timestamp):
     return out.decode().rstrip() == str(timestamp) + s
 
 
+@app.route('/mpp-gpumon')
+def index():
+    stats = get_api('all', False)
+    return render_template('mpp-gpumon.html', stats=stats)
+
+
 @app.route('/api/get/<planets>')
 def get_api(planets, json=True):
     response = []
