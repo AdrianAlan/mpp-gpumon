@@ -1,0 +1,14 @@
+[Unit]
+Description=mpp-gpumon service
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=20
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/env sh /opt/mpp-gpumon/service.sh
+
+[Install]
+WantedBy=multi-user.target
